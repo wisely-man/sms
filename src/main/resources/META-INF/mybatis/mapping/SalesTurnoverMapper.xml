@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.SalesTurnoverMapper">
+
+  <resultMap id="BaseResultMap" type="com.demo.entity.SalesTurnover">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="OPT_TYPE" jdbcType="VARCHAR" property="optType" />
+    <result column="GOODS_ID" jdbcType="INTEGER" property="goodsId" />
+    <result column="GOODS_NAME" jdbcType="VARCHAR" property="goodsName" />
+    <result column="GOODS_NUM" jdbcType="FLOAT" property="goodsNum" />
+    <result column="COMPANY_ID" jdbcType="INTEGER" property="companyId" />
+    <result column="COMPANY_NAME" jdbcType="VARCHAR" property="companyName" />
+    <result column="OPT_ID" jdbcType="INTEGER" property="optId" />
+    <result column="OPT_TIME" jdbcType="VARCHAR" property="optTime" />
+  </resultMap>
+
+  <resultMap id="ExtendResultMap" type="com.demo.entity.SalesTurnover" extends="BaseResultMap">
+    <collection property="goods" column="GOODS_ID" select="com.demo.dao.GoodsInfoMapper.selectByPrimaryKey"></collection>
+    <collection property="company" column="COMPANY_ID" select="com.demo.dao.CompanyInfoMapper.selectByPrimaryKey"></collection>
+    <collection property="operator" column="OPT_ID" select="com.demo.dao.UserInfoMapper.selectByPrimaryKey"></collection>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, OPT_TYPE, GOODS_ID, GOODS_NAME,GOODS_NUM, COMPANY_ID, COMPANY_NAME, OPT_ID, OPT_TIME
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ExtendResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SALES_TURNOVER
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from SALES_TURNOVER
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.demo.entity.SalesTurnover">
+    insert into SALES_TURNOVER (OPT_TYPE, GOODS_ID, GOODS_NAME,
+      GOODS_NUM, COMPANY_ID, COMPANY_NAME, OPT_ID,
+      OPT_TIME)
+    values (#{optType,jdbcType=VARCHAR}, #{goodsId,jdbcType=INTEGER},#{goodsName,jdbcType=VARCHAR},
+      #{goodsNum,jdbcType=FLOAT}, #{companyId,jdbcType=INTEGER}, #{companyName,jdbcType=VARCHAR},
+      #{optId,jdbcType=INTEGER}, #{optTime,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.demo.entity.SalesTurnover">
+    insert into SALES_TURNOVER
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="optType != null">
+        OPT_TYPE,
+      </if>
+      <if test="goodsId != null">
+        GOODS_ID,
+      </if>
+      <if test="goodsNum != null">
+        GOODS_NUM,
+      </if>
+      <if test="goodsName != null">
+        GOODS_NAME,
+      </if>
+      <if test="companyId != null">
+        COMPANY_ID,
+      </if>
+      <if test="companyName != null">
+        COMPANY_NAME,
+      </if>
+      <if test="optId != null">
+        OPT_ID,
+      </if>
+      <if test="optTime != null">
+        OPT_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="optType != null">
+        #{optType,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsName != null">
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsNum != null">
+        #{goodsNum,jdbcType=FLOAT},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="optId != null">
+        #{optId,jdbcType=INTEGER},
+      </if>
+      <if test="optTime != null">
+        #{optTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.demo.entity.SalesTurnover">
+    update SALES_TURNOVER
+    <set>
+      <if test="optType != null">
+        OPT_TYPE = #{optType,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsId != null">
+        GOODS_ID = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsName != null">
+        GOODS_NAME = #{goodsName,jdbcType=INTEGER},
+      </if>
+      <if test="goodsNum != null">
+        GOODS_NUM = #{goodsNum,jdbcType=FLOAT},
+      </if>
+      <if test="companyId != null">
+        COMPANY_ID = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="companyName != null">
+        COMPANY_NAME = #{companyName,jdbcType=INTEGER},
+      </if>
+      <if test="optId != null">
+        OPT_ID = #{optId,jdbcType=INTEGER},
+      </if>
+      <if test="optTime != null">
+        OPT_TIME = #{optTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.demo.entity.SalesTurnover">
+    UPDATE SALES_TURNOVER
+    SET OPT_TYPE = #{optType,jdbcType=VARCHAR},
+      GOODS_ID = #{goodsId,jdbcType=INTEGER},
+      GOODS_NAME = #{goodsName,jdbcType=VARCHAR},
+      GOODS_NUM = #{goodsNum,jdbcType=FLOAT},
+      COMPANY_ID = #{companyId,jdbcType=INTEGER},
+      COMPANY_NAME = #{companyName,jdbcType=VARCHAR},
+      OPT_ID = #{optId,jdbcType=INTEGER},
+      OPT_TIME = #{optTime,jdbcType=VARCHAR}
+    WHERE ID = #{id,jdbcType=INTEGER}
+  </update>
+
+  <sql id="pageSql">
+    SELECT <include refid="Base_Column_List" />
+    FROM SALES_TURNOVER
+    <where>
+      <if test="params.optType != null">
+        AND OPT_TYPE = #{params.optType,jdbcType=VARCHAR}
+      </if>
+      <if test="params.goodsId != null">
+        AND GOODS_ID = #{params.goodsId,jdbcType=INTEGER}
+      </if>
+      <if test="params.goodsName != null">
+        AND GOODS_NAME = #{params.goodsName,jdbcType=VARCHAR}
+      </if>
+      <if test="params.goodsNum != null">
+        AND GOODS_NUM = #{params.goodsNum,jdbcType=FLOAT}
+      </if>
+      <if test="params.companyId != null">
+        AND COMPANY_ID = #{params.companyId,jdbcType=INTEGER}
+      </if>
+      <if test="params.companyName != null">
+        AND COMPANY_NAME = #{params.companyName,jdbcType=VARCHAR}
+      </if>
+      <if test="params.optId != null">
+        AND OPT_ID = #{params.optId,jdbcType=INTEGER}
+      </if>
+      <if test="params.optTime != null">
+        AND OPT_TIME = #{params.optTime,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </sql>
+  <select id="pageCount" parameterType="com.demo.core.common.Paginator" resultType="java.lang.Integer">
+    SELECT COUNT(1)
+    FROM(<include refid="pageSql" />)
+  </select>
+  <select id="pageList" parameterType="com.demo.core.common.Paginator" resultMap="ExtendResultMap">
+    <include refid="pageSql" />
+    LIMIT#{offset} ,#{itemsPerPage}
+  </select>
+
+</mapper>

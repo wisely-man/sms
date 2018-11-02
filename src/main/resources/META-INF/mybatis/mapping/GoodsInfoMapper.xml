@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.GoodsInfoMapper">
+
+  <resultMap id="BaseResultMap" type="com.demo.entity.GoodsInfo">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="CATEGORY" jdbcType="VARCHAR" property="category" />
+    <result column="UNIT_PRICE" jdbcType="FLOAT" property="unitPrice" />
+    <result column="STANDARDS" jdbcType="VARCHAR" property="standards" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, NAME, CATEGORY, UNIT_PRICE, STANDARDS
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from GOODS_INFO
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from GOODS_INFO
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.demo.entity.GoodsInfo">
+    insert into GOODS_INFO (NAME, CATEGORY,
+      UNIT_PRICE, STANDARDS)
+    values (#{name,jdbcType=VARCHAR}, #{category,jdbcType=VARCHAR},
+      #{unitPrice,jdbcType=FLOAT}, #{standards,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.demo.entity.GoodsInfo">
+    insert into GOODS_INFO
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="category != null">
+        CATEGORY,
+      </if>
+      <if test="unitPrice != null">
+        UNIT_PRICE,
+      </if>
+      <if test="standards != null">
+        STANDARDS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null">
+        #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null">
+        #{unitPrice,jdbcType=FLOAT},
+      </if>
+      <if test="standards != null">
+        #{standards,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.demo.entity.GoodsInfo">
+    update GOODS_INFO
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null">
+        CATEGORY = #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null">
+        UNIT_PRICE = #{unitPrice,jdbcType=FLOAT},
+      </if>
+      <if test="standards != null">
+        STANDARDS = #{standards,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.demo.entity.GoodsInfo">
+    update GOODS_INFO
+    set NAME = #{name,jdbcType=VARCHAR},
+      CATEGORY = #{category,jdbcType=VARCHAR},
+      UNIT_PRICE = #{unitPrice,jdbcType=FLOAT},
+      STANDARDS = #{standards,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectListBySelective" resultMap="BaseResultMap" parameterType="com.demo.entity.CompanyInfo">
+    SELECT <include refid="Base_Column_List" />
+    FROM GOODS_INFO
+    <where>
+      <if test="name != null">
+        AND  NAME = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="category != null">
+        AND  CATEGORY = #{category,jdbcType=VARCHAR}
+      </if>
+      <if test="unitPrice != null">
+        AND  UNIT_PRICE = #{unitPrice,jdbcType=FLOAT}
+      </if>
+      <if test="standards != null">
+        AND  STANDARDS = #{standards,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+  <sql id="pageSql" >
+    SELECT <include refid="Base_Column_List" />
+    FROM GOODS_INFO
+    <where>
+      <if test="params.name != null">
+        AND  NAME = #{params.name,jdbcType=VARCHAR}
+      </if>
+      <if test="params.category != null">
+        AND  CATEGORY = #{params.category,jdbcType=VARCHAR}
+      </if>
+      <if test="params.unitPrice != null">
+        AND  UNIT_PRICE = #{params.unitPrice,jdbcType=FLOAT}
+      </if>
+      <if test="params.standards != null">
+        AND  STANDARDS = #{params.standards,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </sql>
+  <select id="pageCount" parameterType="com.demo.core.common.Paginator" resultType="java.lang.Integer">
+    SELECT COUNT(1)
+    FROM(<include refid="pageSql" />)
+  </select>
+  <select id="pageList" parameterType="com.demo.core.common.Paginator" resultMap="BaseResultMap">
+    <include refid="pageSql" />
+    LIMIT#{offset} ,#{itemsPerPage}
+  </select>
+
+</mapper>

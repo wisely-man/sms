@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.CompanyInfoMapper">
+
+  <resultMap id="BaseResultMap" type="com.demo.entity.CompanyInfo">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="TEL" jdbcType="VARCHAR" property="tel" />
+    <result column="FAX" jdbcType="VARCHAR" property="fax" />
+    <result column="CONTACT" jdbcType="VARCHAR" property="contact" />
+    <result column="CONTACT_TEL" jdbcType="VARCHAR" property="contactTel" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, NAME, ADDRESS, TEL, FAX, CONTACT, CONTACT_TEL
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from COMPANY_INFO
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from COMPANY_INFO
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.demo.entity.CompanyInfo">
+    insert into COMPANY_INFO (NAME, ADDRESS,
+      TEL, FAX, CONTACT, 
+      CONTACT_TEL)
+    values (#{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+      #{tel,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, 
+      #{contactTel,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.demo.entity.CompanyInfo">
+    insert into COMPANY_INFO
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="address != null">
+        ADDRESS,
+      </if>
+      <if test="tel != null">
+        TEL,
+      </if>
+      <if test="fax != null">
+        FAX,
+      </if>
+      <if test="contact != null">
+        CONTACT,
+      </if>
+      <if test="contactTel != null">
+        CONTACT_TEL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null">
+        #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null">
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTel != null">
+        #{contactTel,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.demo.entity.CompanyInfo">
+    update COMPANY_INFO
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        TEL = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null">
+        FAX = #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null">
+        CONTACT = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTel != null">
+        CONTACT_TEL = #{contactTel,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.demo.entity.CompanyInfo">
+    update COMPANY_INFO
+    set NAME = #{name,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      TEL = #{tel,jdbcType=VARCHAR},
+      FAX = #{fax,jdbcType=VARCHAR},
+      CONTACT = #{contact,jdbcType=VARCHAR},
+      CONTACT_TEL = #{contactTel,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectListBySelective" resultMap="BaseResultMap" parameterType="com.demo.entity.CompanyInfo">
+    SELECT <include refid="Base_Column_List"/>
+    FROM COMPANY_INFO
+    <where>
+    <if test="name != null">
+      AND NAME = #{name,jdbcType=VARCHAR}
+    </if>
+    <if test="address != null">
+      AND ADDRESS = #{address,jdbcType=VARCHAR}
+    </if>
+    <if test="tel != null">
+      AND TEL = #{tel,jdbcType=VARCHAR}
+    </if>
+    <if test="fax != null">
+      AND FAX = #{fax,jdbcType=VARCHAR}
+    </if>
+    <if test="contact != null">
+      AND CONTACT = #{contact,jdbcType=VARCHAR}
+    </if>
+    <if test="contactTel != null">
+      AND CONTACT_TEL = #{contactTel,jdbcType=VARCHAR}
+    </if>
+    </where>
+  </select>
+
+  <sql id="pageSql">
+    SELECT <include refid="Base_Column_List"/>
+    FROM COMPANY_INFO
+    <where>
+      <if test="params.name != null">
+        AND NAME = #{params.name,jdbcType=VARCHAR}
+      </if>
+      <if test="params.address != null">
+        AND ADDRESS = #{params.address,jdbcType=VARCHAR}
+      </if>
+      <if test="params.tel != null">
+        AND TEL = #{params.tel,jdbcType=VARCHAR}
+      </if>
+      <if test="params.fax != null">
+        AND FAX = #{fax,jdbcType=VARCHAR}
+      </if>
+      <if test="params.contact != null">
+        AND CONTACT = #{contact,jdbcType=VARCHAR}
+      </if>
+      <if test="params.contactTel != null">
+        AND CONTACT_TEL = #{params.contactTel,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </sql>
+  <select id="pageCount" parameterType="com.demo.core.common.Paginator" resultType="java.lang.Integer">
+    SELECT COUNT(1)
+    FROM(<include refid="pageSql" />)
+  </select>
+  <select id="pageList" parameterType="com.demo.core.common.Paginator" resultMap="BaseResultMap">
+    <include refid="pageSql" />
+    LIMIT#{offset} ,#{itemsPerPage}
+  </select>
+
+</mapper>
